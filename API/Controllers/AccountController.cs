@@ -1,12 +1,13 @@
 using System;
 using System.Security.Cryptography;
 using System.Text;
+using API.Data;
 using API.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-public class AccountController : BaseApiController
+public class AccountController(DataContext context) : BaseApiController
 {
     [HttpPost("register")] // account/register
     public async Task<ActionResult<AppUser>> Register(string username, string password)
@@ -19,5 +20,10 @@ public class AccountController : BaseApiController
             PasswordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password)),
             PasswordSalt = hmac.Key
         };
+
+        context.Users.Add(user);
+        await context.SaveChangesAsync();
+
+        return user;
     }
 }
