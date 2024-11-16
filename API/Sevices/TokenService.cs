@@ -12,7 +12,7 @@ public class TokenService(IConfiguration config) : ITokenService
         // For demonstration purposes, let's use a simple string for the token
         var tokenKey = config["TokenKeyt"] ?? throw new Exception("No token key from app settings");
         if (tokenKey.Length < 64) throw new Exception("Your key must be at least 64 characters");
-        var key
+        var key = SymmetricSecurityKey.Create(tokenKey, configuration
     }
 
 }
